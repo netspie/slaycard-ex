@@ -1,6 +1,11 @@
 defmodule Stat do
   defstruct original_value: 0, modifiers: []
 
+  def add_modifier(%Stat{} = stat, modifierValue) when is_number(modifierValue) do
+    stat
+    |> add_modifier(StatModifier.new(modifierValue, :add))
+  end
+
   def add_modifier(%Stat{} = stat, %StatModifier{} = modifier) do
     %Stat{
       stat |
