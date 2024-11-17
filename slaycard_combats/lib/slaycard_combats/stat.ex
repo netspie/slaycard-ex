@@ -3,7 +3,7 @@ defmodule Stat do
 
   @type t() :: %Stat{
     original_value: integer(),
-    modifiers: []
+    modifiers: [%StatModifier{}]
   }
 
   def new(value) when is_number(value), do: %Stat{ original_value: value }
