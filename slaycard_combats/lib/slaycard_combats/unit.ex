@@ -5,13 +5,14 @@ end
 defmodule Unit do
   defstruct [
     :id,
-    :stats,
+    :stat_group,
     :artifacts
   ]
 
   def new() do
-    stats = UnitStatGroup.new(10, 10, 10, 10, 10, 10, 10, 10)
-    IO.puts stats.hp
+    %Unit{
+      stat_group: UnitStatGroup.new([
+        hp: 10, energy: Stat.new(10), attack: 10, defence: 10, accuracy: 10, dodge: 10, critics: 10, speed: 10])
+    }
   end
-
 end

@@ -6,6 +6,6 @@ defmodule CombatTest do
     Combat.new()
     |> (& assert(
       length(&1.events) == 1 &&
-      hd(&1.events).content.__struct__ == BattleCreatedEventContent)).()
+      hd(&1.events).content.__struct__ == CombatCreatedEventContent)).()
   end
 end

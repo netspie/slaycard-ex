@@ -1,8 +1,7 @@
-defmodule CombatId, do: defstruct [:value]
 
-defmodule BattleCreatedEventContent do
+defmodule CombatCreatedEventContent do
   defstruct [
-    :battle_id,
+    :combat_id,
     :players
   ]
 end
@@ -14,13 +13,6 @@ defmodule DomainEvent do
     :content
   ]
 
-  @type t() :: %DomainEvent {
-    id: String.t(),
-    created_timestamp: integer(),
-    content: %{}
-  }
-
-  @spec new(struct()) :: %DomainEvent{}
   def new(content) do
     %DomainEvent{
       id: 2,
@@ -29,28 +21,29 @@ defmodule DomainEvent do
     }
   end
 
-  @spec newArr(struct()) :: [%DomainEvent{}]
   def newArr(content), do: [new(content)]
 end
 
+defmodule CombatId, do: defstruct [:value]
 defmodule Combat do
+  @type t :: %Combat{
+    id: %CombatId{},
+    players: [%Player{}]
+  }
+
+  @spec new() :: %{ combat: %Combat{}, events: [%DomainEvent{}]}
+
   defstruct [
     :id,
     :players
   ]
 
-  @type t() :: %Combat{
-    id: %CombatId{},
-    players: [%Player{}]
-  }
-
-  @spec new() :: %{ combat: %Combat{}, events: [%DomainEvent{}] }
   def new() do
     %{
       combat: %Combat{},
       events: DomainEvent.newArr(
-          %BattleCreatedEventContent{
-            battle_id: "",
+          %CombatCreatedEventContent{
+            combat_id: "",
             players: []
           })
     }

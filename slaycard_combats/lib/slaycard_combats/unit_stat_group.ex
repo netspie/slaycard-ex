@@ -10,43 +10,30 @@ defmodule UnitStatGroup do
     :speed
   ]
 
-  @type t() :: %UnitStatGroup{
-    hp: Stat.t(),
-    energy: Stat.t(),
-    attack: Stat.t(),
-    defence: Stat.t(),
-    accuracy: Stat.t(),
-    dodge: Stat.t(),
-    critics: Stat.t(),
-    speed: Stat.t()
-  }
-
-  @type x :: Stat.t() | number()
-  @spec new(%Stat{} | number(), %Stat{} | number(), %Stat{} | number(), %Stat{} | number(), %Stat{} | number(), %Stat{} | number(), %Stat{} | number(), %Stat{} | number())
-  :: UnitStatGroup.t()
-  def new(hp, energy, attack, defence, accuracy, dodge, critics, speed) when is_number(hp) do
+  def new(stats) when is_list(stats) do
     %UnitStatGroup{
-      hp: Stat.new(hp),
-      energy: Stat.new(energy),
-      attack: Stat.new(attack),
-      defence: Stat.new(defence),
-      accuracy: Stat.new(accuracy),
-      dodge: Stat.new(dodge),
-      critics: Stat.new(critics),
-      speed: Stat.new(speed)
+      hp: getStat(stats, :hp),
+      energy: getStat(stats, :energy),
+      attack: getStat(stats, :attack),
+      defence: getStat(stats, :defence),
+      accuracy: getStat(stats, :accuracy),
+      dodge: getStat(stats, :critics),
+      critics: getStat(stats, :critics),
+      speed: getStat(stats, :speed)
     }
   end
 
-  def new(hp, energy, attack, defence, accuracy, dodge, critics, speed) do
-    %UnitStatGroup{
-      hp: hp,
-      energy: energy,
-      attack: attack,
-      defence: defence,
-      accuracy: accuracy,
-      dodge: dodge,
-      critics: critics,
-      speed: speed
-    }
+  defp getStat(stats, stat_atom)
+    when is_list(stats)
+    when is_atom(stat_atom) do
+    stats |> Keyword.get(stat_atom, 0) |> getStat
+  end
+
+  defp getStat(stat) do
+    cond do
+      is_struct(stat, Stat) -> stat
+      is_number(stat) -> Stat.new(stat)
+      true -> "Not a valid stat"
+    end
   end
 end
